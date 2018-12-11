@@ -1,5 +1,6 @@
 package com.azr.rest;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,14 @@ public class FileConverterRestController {
 	@GetMapping("/getJsonFile")
 	@ResponseBody
 	public ResponseEntity<List<RentDataItem>> getJsonFile() {
-		List<RentDataItem> list = fileDaoImpl.getCsvFile();
-		return new ResponseEntity<List<RentDataItem>>(list,new HttpHeaders(),HttpStatus.OK);
+		try {
+			List<RentDataItem> list = fileDaoImpl.getCsvFile();
+			return new ResponseEntity<List<RentDataItem>>(list,new HttpHeaders(),HttpStatus.OK);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ResponseEntity<List<RentDataItem>>(null,new HttpHeaders(),HttpStatus.NOT_FOUND);
+		}
 		
 	}
 }
